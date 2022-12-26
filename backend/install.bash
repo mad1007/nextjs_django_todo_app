@@ -36,7 +36,7 @@ echo 'Create a supervisor configuration file'
 cat > foo.conf << EOF
 [program:rest_todo_app]
 directory=$cwd
-command=$cwd/env/bin/gunicorn mybackend.wsgi -w 3  -b 0.0.0.0:8000
+command=$cwd/env/bin/gunicorn mybackend.wsgi -w 3  -b 0.0.0.0:8003
 user=mad
 autostart=true
 autorestart=true
@@ -58,7 +58,7 @@ supervisorctl reread
 
 supervisorctl reload
 
-echo 'Your app should be hosted on http://localhost:8000'
+echo 'Your app should be hosted on http://localhost:8003'
 chown mad:mad --recursive .
 
 
@@ -67,7 +67,7 @@ apt-get install nginx
 
 cat > foot << EOF
 server {
-    listen 8049;
+    listen 8004;
 
     location /static {
         autoindex on;
@@ -76,7 +76,7 @@ server {
 
     location / {
         include proxy_params;
-        proxy_pass http://localhost:8000;
+        proxy_pass http://localhost:8003;
     }
 }
 
