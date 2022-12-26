@@ -35,11 +35,10 @@ const Login = () => {
     </div>
       )
     
-
     async function submitLoginForm(e){
         e.preventDefault()
         const body = {username, password}
-        const response = await fetchWithCreds(`/login/`, 'POST', body)
+        const response = await fetchWithCreds(`/api/login/`, 'POST', body)
         if(!response) return
         console.log(response.headers)
 

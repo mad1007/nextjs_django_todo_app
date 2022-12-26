@@ -25,8 +25,7 @@ const Todos = () => {
   const updateOrCreateTodo = async (e)=>{
     console.log(e)
     e.preventDefault()
-
-    const response = await fetchWithCreds(`/todos/`,"POST", selectedTodo)
+    const response = await fetchWithCreds(`/api/todos/`,"POST", selectedTodo)
     if(!response){
       addMessage({msg:"Error while fetching todos", type:"warning"})
     }else if(response.status != 200  ){
@@ -56,7 +55,7 @@ const Todos = () => {
   const deleteTodo = async(currentTodo)=>{
     if(confirm("Do you realy want to delete this todo")){
 
-      const response = await fetchWithCreds(`/todos/`,"DELETE", {id:currentTodo.id})
+      const response = await fetchWithCreds(`/api/todos/`,"DELETE", {id:currentTodo.id})
       if(!response){
         addMessage({msg:"Error while fetching todos", type:"warning"})
       }else if(response.status != 204){
@@ -82,7 +81,7 @@ const Todos = () => {
   }
   useEffect(()=>{
     const getTodos = async ()=>{
-      const response = await fetchWithCreds(`/todos/`,"GET")
+      const response = await fetchWithCreds(`/api/todos/`,"GET")
       if(!response){
         addMessage({msg:"Error while fetching todos", type:"warning"})
       }else if(response.status != 200  ){
