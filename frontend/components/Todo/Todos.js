@@ -26,8 +26,7 @@ const Todos = () => {
     console.log(e)
     e.preventDefault()
 
-    const url = process.env.API_URL || 'http://127.0.0.1:8000/api/'
-    const response = await fetchWithCreds(`${url}todos/`,"POST", selectedTodo)
+    const response = await fetchWithCreds(`/todos/`,"POST", selectedTodo)
     if(!response){
       addMessage({msg:"Error while fetching todos", type:"warning"})
     }else if(response.status != 200  ){
@@ -57,8 +56,7 @@ const Todos = () => {
   const deleteTodo = async(currentTodo)=>{
     if(confirm("Do you realy want to delete this todo")){
 
-      const url = process.env.API_URL || 'http://127.0.0.1:8000/api/'
-      const response = await fetchWithCreds(`${url}todos/`,"DELETE", {id:currentTodo.id})
+      const response = await fetchWithCreds(`/todos/`,"DELETE", {id:currentTodo.id})
       if(!response){
         addMessage({msg:"Error while fetching todos", type:"warning"})
       }else if(response.status != 204){
@@ -84,8 +82,7 @@ const Todos = () => {
   }
   useEffect(()=>{
     const getTodos = async ()=>{
-      const url = process.env.API_URL || 'http://127.0.0.1:8000/api/'
-      const response = await fetchWithCreds(`${url}todos/`,"GET")
+      const response = await fetchWithCreds(`/todos/`,"GET")
       if(!response){
         addMessage({msg:"Error while fetching todos", type:"warning"})
       }else if(response.status != 200  ){

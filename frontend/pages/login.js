@@ -35,12 +35,11 @@ const Login = () => {
     </div>
       )
     
-    const url = process.env.API_URL || 'http://127.0.0.1:8000/api/'
 
     async function submitLoginForm(e){
         e.preventDefault()
         const body = {username, password}
-        const response = await fetchWithCreds(`${url}login/`, 'POST', body)
+        const response = await fetchWithCreds(`/login/`, 'POST', body)
         if(!response) return
         console.log(response.headers)
 

@@ -12,8 +12,7 @@ const UserProvider = ({children})=>{
 
     const checkAuth = async (showMsgError=true)=>{
         setLoading(true)
-        const url = process.env.API_URL || 'http://127.0.0.1:8000/api/'
-        const response = await fetchWithCreds(`${url}auth/check/`)
+        const response = await fetchWithCreds(`/auth/check/`)
         if(!response || response.status != 200){
             if(response){
                 const errMessage = await response.json()
@@ -31,8 +30,7 @@ const UserProvider = ({children})=>{
         return true
     }
     const logout = async ()=>{
-        const url = process.env.API_URL || 'http://127.0.0.1:8000/api/'
-        const response = await fetchWithCreds(`${url}logout/`)
+        const response = await fetchWithCreds(`/logout/`)
         if(!response || response.status != 200){
             return false
         }
