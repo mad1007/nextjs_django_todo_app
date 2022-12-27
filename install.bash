@@ -87,19 +87,6 @@ rm /etc/nginx/sites-enabled/default
 
 service nginx restart
 
-echo 'Cofigure npm and frontend'
-echo '============================='
-
-sudo apt install nodejs
-cd ./frontend/
-
-echo 'Downloading frontend libraries'
-echo '============================='
-npm i
-echo 'Build frontend'
-echo '============================='
-npm run build
-
 echo 'SETUP COMPLETE'
 
 echo 'Please change nginx user to "mad" and restart nginx service'
