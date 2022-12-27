@@ -43,7 +43,7 @@ def signin(request):
         jwt_cookie_name = JWT_SETTINGS['ACCESS_TOKEN_COOKIE_NAME']
     except KeyError as e:
         raise ImproperlyConfigured(_("you must set SIMPLE_JWT['ACCESS_TOKEN_COOKIE_NAME']"))
-    response.set_cookie(jwt_cookie_name, tokens['access'], samesite='None', secure=settings.USING_HTTPS, httponly=True, max_age=JWT_SETTINGS['ACCESS_TOKEN_LIFETIME'].total_seconds())
+    response.set_cookie(jwt_cookie_name, tokens['access'], samesite='Strict', secure=settings.USING_HTTPS, httponly=True, max_age=JWT_SETTINGS['ACCESS_TOKEN_LIFETIME'].total_seconds())
     return response
 
 @api_view(["GET"])

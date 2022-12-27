@@ -41,7 +41,7 @@ echo 'Create a supervisor configuration file'
 cat > foo.conf << EOF
 [program:rest_todo_app]
 directory=$cwd/backend/
-command=$cwd/env/bin/gunicorn mybackend.wsgi -w 3  -b 0.0.0.0:$internal_port
+command=$cwd/backend/env/bin/gunicorn mybackend.wsgi -w 3  -b 0.0.0.0:$internal_port
 user=mad
 autostart=true
 autorestart=true
