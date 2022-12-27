@@ -1,24 +1,34 @@
 #!/bin/bash
+
+# Variables
+cwd=$(pwd)
+external_port=8000
+internal_port=8001
+
+echo 'Update packages'
+echo '============================='
+sudo apt update && sudo apt upgrade
+
 echo 'Installing python virtualenv'
 echo '============================='
 apt install virtualenv
 
 echo 'Creating a virtual environement'
 echo '============================='
-virtualenv env
+virtualenv ./backend/env
 
 echo 'Activating the env'
 echo '============================='
-source ./env/bin/activate
+source ./backend/env/bin/activate
 
 echo 'Downloading packages'
-pip install -r requirements.txt
+pip install -r ./backend/requirements.txt
 
 echo 'Creating database'
-python ./manage.py migrate
+python ./backend/manage.py migrate
 
 echo 'Load Data'
-python ./manage.py createsuperuser
+python ./backend/manage.py createsuperuser
 
 echo 'Downloading the supervisor'
 apt-get install supervisor
@@ -26,14 +36,11 @@ apt-get install supervisor
 echo 'Starting the supervisor'
 service supervisor restart
 service supervisor status
-cwd=$(pwd)
-external_port=8000
-internal_port=8001
 
 echo 'Create a supervisor configuration file'
 cat > foo.conf << EOF
 [program:rest_todo_app]
-directory=$cwd
+directory=$cwd/backend/
 command=$cwd/env/bin/gunicorn mybackend.wsgi -w 3  -b 0.0.0.0:$internal_port
 user=mad
 autostart=true
@@ -80,7 +87,18 @@ rm /etc/nginx/sites-enabled/default
 
 service nginx restart
 
+echo 'Cofigure npm and frontend'
+echo '============================='
 
+sudo apt install nodejs
+cd ./frontend/
+
+echo 'Downloading frontend libraries'
+echo '============================='
+npm i
+echo 'Build frontend'
+echo '============================='
+npm run build
 
 echo 'SETUP COMPLETE'
 
