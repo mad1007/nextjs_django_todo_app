@@ -13,13 +13,16 @@ const UserProvider = ({children})=>{
     const checkAuth = async (showMsgError=true)=>{
         setLoading(true)
         const response = await fetchWithCreds(`/api/auth/check/`)
-        if(!response || response.status != 200){
-            if(response){
-                const errMessage = await response.json()
-                console.log('errMessage', errMessage)
-                if(showMsgError){
-                    addMessage({type:"warning", msg:errMessage.detail})
-                }
+        if(!response || response.status == 404){
+            setLoading(false)
+            return addMessage({type:"warning", msg:"Couldnt authenticate"})
+        }
+
+        if(response.status != 200){
+            const errMessage = await response.json()
+            console.log('errMessage', errMessage)
+            if(showMsgError){
+                addMessage({type:"warning", msg:errMessage.detail})
             }
             setLoading(false)
             return false

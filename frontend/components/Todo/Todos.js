@@ -8,7 +8,7 @@ import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
 import { useUser } from '../../contexts/UserContext'
 import { BsPlus } from "react-icons/bs";
-
+import styles from './Todos.module.css'
 const Todos = () => {
   const [todos, setTodos] = useState([])
   const [filterKey, setFilterKey] = useState("1")
@@ -26,8 +26,8 @@ const Todos = () => {
     console.log(e)
     e.preventDefault()
     const response = await fetchWithCreds(`/api/todos/`,"POST", selectedTodo)
-    if(!response){
-      addMessage({msg:"Error while fetching todos", type:"warning"})
+    if(!response || response.status == 404){
+      addMessage({msg:"Error while fetching todos 🤬 🤬", type:"warning"})
     }else if(response.status != 200  ){
       const errorMsg = await response.json()
       addMessage({msg:JSON.stringify(errorMsg), type:"warning"})
@@ -48,7 +48,7 @@ const Todos = () => {
       }
       setTodos(newTodos)
       setShowModal(false)
-      addMessage({msg:"Update succeed", type: "success"})
+      addMessage({msg:"Update succeed 😇 😇", type: "success"})
     }
   }
 
@@ -57,14 +57,14 @@ const Todos = () => {
 
       const response = await fetchWithCreds(`/api/todos/`,"DELETE", {id:currentTodo.id})
       if(!response){
-        addMessage({msg:"Error while fetching todos", type:"warning"})
+        addMessage({msg:"Error while fetching todos 🤬 🤬", type:"warning"})
       }else if(response.status != 204){
         const errorMsg = await response.json()
         addMessage({msg:JSON.stringify(errorMsg), type:"warning"})
       }else{
         const newTodos = todos.filter(todo=>currentTodo.id != todo.id)
         setTodos(newTodos)
-        addMessage({type: "success", msg: "todo deleted successfully"})
+        addMessage({type: "success", msg: "todo deleted successfully 🤫 🤫"})
   
       }
     }
@@ -99,10 +99,10 @@ const Todos = () => {
   
   return (
     <>
-    <div className='d-flex row'>
-      <div className='col-sm-12 col-md-4 text-center' ><h1>Todos List</h1></div>
-      <div className='col-sm-12 col-md-4 text-center mb-3' ><small className='text-muted'>You still have {todos.filter(todo=>!todo.done).length} todos to accomplish</small></div>
-      <div className='col-sm-12 col-md-4 text-center' >
+    <div className={`d-flex row ${styles.fixedTop}`} >
+      <div className='col-sm-12 col-md-4 text-center' ><h1 className='m-0 p-0'>Todos List</h1></div>
+      <div className='col-sm-12 col-md-4 text-center mt-2 d-flex-align-items-center justify-content-center' ><small className='text-muted'>You still have {todos.filter(todo=>!todo.done).length} todos to accomplish {todos.length <=2 ? '🤓🤓' : todos.length <=4 ? '🤨🤨' : '🤬🤬' }</small></div>
+      <div className='col-sm-12 col-md-4 text-center mt-2' >
         <button className='btn btn-dark btn-lg' onClick={(e)=>{setSelectedTodo({done: false, deadline:"", title:"", description:"", user:user?.id});setShowModal(true)}} ><BsPlus size={30} /> TODO</button>
       </div>
     </div>
@@ -113,7 +113,7 @@ const Todos = () => {
         <option value="3">Not Done Yet</option>
         </Form.Select>
 
-      {todos?.length > 0 ? (filterTodos().map(todo=><Todo key={todo.id} selectTodo={selectTodo} deleteTodo={deleteTodo} todo={todo}/>)) : <h4>No todos are available</h4>}
+      {todos?.length > 0 ? (filterTodos().map(todo=><Todo key={todo.id} selectTodo={selectTodo} deleteTodo={deleteTodo} todo={todo}/>)) : <h4 className='mt-5 text-center'>No todos for today 😁 😁 😁 </h4>}
 
       <Modal show={showModal} onHide={()=>setShowModal(false)}>
       <Form onSubmit={(e)=>updateOrCreateTodo(e)}>

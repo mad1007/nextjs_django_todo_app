@@ -1,5 +1,9 @@
 export const fetchWithCreds = async (url, method="GET", body)=>{
     console.log(url)
+    // if(devMode){
+    //     const prevUrl = url
+    //     url = "http://127.0.0.1:8000"+prevUrl
+    // }
     const fetchParams = {
         method,
         headers:{'Content-Type':'application/json'},

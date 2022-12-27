@@ -20,7 +20,7 @@ export const Layout = ({children}) => {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
             <MyNavbar />
-            <ToastContainer/>
+            <ToastContainer position='bottom-center' style={{maxWidth:"80%"}}/>
             <main>{children}</main>
             <Footer/>
 

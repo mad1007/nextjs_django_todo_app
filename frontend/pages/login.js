@@ -9,6 +9,7 @@ import Spinner from 'react-bootstrap/Spinner';
 const Login = () => {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
+    const [authLoading, setauthLoading] = useState(false)
     const router = useRouter()
 
 
@@ -37,16 +38,20 @@ const Login = () => {
     
     async function submitLoginForm(e){
         e.preventDefault()
+        setauthLoading(true)
         const body = {username, password}
         const response = await fetchWithCreds(`/api/login/`, 'POST', body)
-        if(!response) return
-        console.log(response.headers)
-
+        if(!response || response.status == 404){
+          setauthLoading(false)
+          return addMessage({type:"warning", msg:"Couldnt authenticate"})
+        }
         if(response.status != 200){
             const error = await response.json()
             addMessage({'type':'warning', msg:JSON.stringify(error)})
+            setauthLoading(false)
         }else{
             addMessage({type:'success', msg:'Successfully logged In'})
+            setauthLoading(false)
             router.push('/')
         }
     }
@@ -66,7 +71,7 @@ const Login = () => {
                 <input value={password} onChange={(e)=>setPassword(e.target.value)} required type="password"  className="form-control my-2" id="floatingPassword" placeholder="Password"/>
                 <label htmlFor="floatingPassword">Password</label>
                 </div>
-                <button className="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
+                <button disabled={authLoading} className="w-100 btn btn-lg btn-primary" type="submit">{authLoading ? 'Loading...': 'Sign in'}</button>
             </form>
         </div>
     </div>
