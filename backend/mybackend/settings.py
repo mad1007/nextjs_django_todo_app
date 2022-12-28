@@ -12,9 +12,23 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 
 from pathlib import Path
 from datetime import timedelta
-
+import os
+import environ
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
+env = environ.Env(
+    # set casting, default value
+    DEBUG=(bool, False),
+    SECRET_KEY=(str, 'django-insecure-mr9txq@feq&^#-9dpo8l3ao^ehzpgeb!r$&+si(+w4xy8ihyip'),
+    ALLOWED_HOSTS=(list, ["*"]),
+    HTTP_COOKIE_SAMESITE=(str, "Strict"),
+    USING_HTTPS=(bool, False),
+
+)
+
 
 
 # Quick-start development settings - unsuitable for production
@@ -24,9 +38,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-ho(96u3u876pv97-v4k*ilw3y*dpzc446@=k!h42i5#kx4+ob1'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env('DEBUG')
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = env('ALLOWED_HOSTS')
 
 
 # Application definition
@@ -177,10 +191,10 @@ SIMPLE_JWT = {
 # CORS_ALLOW_ALL_ORIGINS = True # If this is used then `CORS_ALLOWED_ORIGINS` will not have any effect
 # CORS_ALLOW_CREDENTIALS = True
 
-USING_HTTPS = False
+USING_HTTPS = env('USING_HTTPS')
 
 # "Strict" if same origin else None
-HTTP_COOKIE_SAMESITE="Strict"
+HTTP_COOKIE_SAMESITE=env('HTTP_COOKIE_SAMESITE')
 
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
