@@ -1,9 +1,10 @@
 export const fetchWithCreds = async (url, method="GET", body)=>{
-    console.log(url)
-    // if(devMode){
-    //     const prevUrl = url
-    //     url = "http://127.0.0.1:8000"+prevUrl
-    // }
+    const dev = process.env.NEXT_PUBLIC_BUILD_STATUS != "PRODUCTION"
+    let targetUrl = url
+    if(dev){
+        const baseUrl = process.env.NEXT_PUBLIC_SERVER_URL || "http://127.0.0.1:8000"
+        targetUrl = baseUrl+url
+    }
     const fetchParams = {
         method,
         headers:{'Content-Type':'application/json'},
@@ -17,7 +18,7 @@ export const fetchWithCreds = async (url, method="GET", body)=>{
 
     try {
         const response = await fetch(
-            url, fetchParams
+            targetUrl, fetchParams
         )        
         return response
 
